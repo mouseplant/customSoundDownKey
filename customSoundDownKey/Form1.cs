@@ -16,6 +16,7 @@ namespace customSoundDownKey
         // 최적화 핵심 1: 사운드 파일을 메모리에 한 번만 로드할 버퍼
         private byte[] audioBuffer;
         private WaveFormat waveFormat;
+        private int volume = 25;
 
         public Form1()
         {
@@ -72,11 +73,11 @@ namespace customSoundDownKey
         // --- 키 다운 이벤트 핸들러 (Async 사용) ---
         private void GlobalHook_KeyDown(object sender, KeyEventArgs e)
         {
-           
+
             // Task.Run을 사용하여 메인 스레드와 키 후킹 스레드를 막지 않고 
             // 별도의 스레드에서 사운드 재생을 비동기적으로 처리합니다.
             Task.Run(() => PlaySoundEffect(soundFilePath));
-           
+
             // 이벤트를 다른 프로그램에 전달하지 않으려면 e.Handled = true; 를 추가
             // e.Handled = true; 
         }
@@ -99,6 +100,9 @@ namespace customSoundDownKey
             {
                 // 1. 새로운 AudioFileReader 객체 생성: 매번 처음부터 재생 가능
                 audioFile = new AudioFileReader(filePath);
+
+                // 1-1. audioFile에 volume 변수에 맞게 사운드를 조절할수 있게 한다
+                audioFile.Volume = 1.0f * ((float)volume / 25);
 
                 // 2. WasapiOut 초기화: 저 레이턴시 설정
                 // AudioClientShareMode.Shared: 다른 앱과 공유
@@ -137,6 +141,40 @@ namespace customSoundDownKey
             {
                 m_GlobalHook.KeyDown -= GlobalHook_KeyDown;
                 m_GlobalHook.Dispose(); // 전역 후킹 반드시 해제
+            }
+        }
+
+        private void volumeSlider1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            volume = VolumeBar.Value;
+            volume_label.Text = "음량: " + volume;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SoundList_Box_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // 1. 선택된 항목 가져오기
+            // ListBox.SelectedItem 속성은 현재 선택된 항목의 값을 반환합니다. 
+            // 이 값은 일반적으로 object 타입이므로, 문자열로 변환해야 합니다.
+            object selectedItem = SoundList_Box.SelectedItem;
+
+            // 선택된 항목이 null이 아닌지 확인 (아무것도 선택되지 않았거나 선택이 해제된 경우)
+            if (selectedItem != null)
+            {
+                // 2. 메시지 박스로 표시
+                string itemText = selectedItem.ToString();
+
+                // MessageBox.Show 메서드를 사용하여 항목의 텍스트를 사용자에게 보여줍니다.
+                MessageBox.Show($"선택된 항목: {itemText}", "ListBox 항목 선택", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

@@ -1,16 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36616.10 d17.14
+VisualStudioVersion = 17.14.36616.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "customSoundDownKey", "customSoundDownKey\customSoundDownKey.csproj", "{E789829F-3EA6-42B1-8D14-8CC068EC0D50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		beta|Any CPU = beta|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E789829F-3EA6-42B1-8D14-8CC068EC0D50}.beta|Any CPU.ActiveCfg = beta|Any CPU
+		{E789829F-3EA6-42B1-8D14-8CC068EC0D50}.beta|Any CPU.Build.0 = beta|Any CPU
 		{E789829F-3EA6-42B1-8D14-8CC068EC0D50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E789829F-3EA6-42B1-8D14-8CC068EC0D50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E789829F-3EA6-42B1-8D14-8CC068EC0D50}.Release|Any CPU.ActiveCfg = Release|Any CPU
