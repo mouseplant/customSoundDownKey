@@ -1,10 +1,6 @@
 using NAudio.Wave;
 using NAudio.CoreAudioApi; // WasapiOut 사용을 위해 추가
 using Gma.System.MouseKeyHook;
-using System.Windows.Forms;
-using System;
-using System.IO;
-using System.Threading.Tasks; // 비동기 처리를 위해 추가
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -199,6 +195,7 @@ namespace customSoundDownKey
                 string itemText = selectedItem.ToString();
 
                 //MessageBox.Show 메서드를 사용하여 항목의 텍스트를 사용자에게 보여줍니다.
+
                 MessageBox.Show($"선택된 항목: {itemText}", "ListBox 항목 선택", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
