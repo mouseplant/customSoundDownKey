@@ -198,7 +198,7 @@ namespace customSoundDownKey
                 // 2. 메시지 박스로 표시
                 string itemText = selectedItem.ToString();
 
-                // MessageBox.Show 메서드를 사용하여 항목의 텍스트를 사용자에게 보여줍니다.
+                //MessageBox.Show 메서드를 사용하여 항목의 텍스트를 사용자에게 보여줍니다.
                 MessageBox.Show($"선택된 항목: {itemText}", "ListBox 항목 선택", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
