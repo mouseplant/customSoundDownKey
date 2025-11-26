@@ -1,3 +1,9 @@
+// 참고: NAudio 라이브러리가 필요합니다. NuGet 패키지 매니저에서 NAudio를 설치하세요.
+// 참고: Gma.System.MouseKeyHook 라이브러리가 필요합니다. NuGet 패키지 매니저에서 설치하세요.
+// attention: this code uses NAudio and Gma.System.MouseKeyHook libraries.
+// Make sure to install them via NuGet Package Manager.
+// 오.. ai가 주석도 달아주네 
+
 using NAudio.Wave;
 using NAudio.CoreAudioApi; // WasapiOut 사용을 위해 추가
 using Gma.System.MouseKeyHook;
@@ -7,6 +13,9 @@ using System.IO;
 using System.Threading.Tasks; // 비동기 처리를 위해 추가
 using System.Reflection;
 using System.Runtime.InteropServices;
+
+// 프로젝트내 네임스페이스
+
 
 
 namespace customSoundDownKey
@@ -21,7 +30,12 @@ namespace customSoundDownKey
         private byte[] audioBuffer;
         private WaveFormat waveFormat;
         private int volume = 25;
-    
+
+
+        //만든 클래스 
+        private SoundFileService soundFileService;
+        private SoundManager soundManager; 
+
         // 디버깅을 위한 함수 =================
         [DllImport("kernel32.dll")]
         static extern bool AllocConsole();
@@ -123,7 +137,7 @@ namespace customSoundDownKey
                 // 2. WasapiOut 초기화: 저 레이턴시 설정
                 // AudioClientShareMode.Shared: 다른 앱과 공유
                 // latency: 밀리초 단위, 50ms 이하는 매우 낮음 (하드웨어/드라이버에 따라 제한될 수 있음)
-                outputDevice = new WasapiOut(AudioClientShareMode.Shared, false, 50);
+                outputDevice = new WasapiOut(AudioClientShareMode.Shared, false, 0);
 
                 outputDevice.Init(audioFile);
 
@@ -160,30 +174,33 @@ namespace customSoundDownKey
             }
         }
 
-        private void volumeSlider1_Load(object sender, EventArgs e)
-        {
 
-        }
-
+        // --- volume scroll event handler ---
+        // --- 음량 조절 트랙바 이벤트 핸들러 ---
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            volume = VolumeBar.Value;
-            Volume_label.Text = "음량: " + volume;
+            soundManager.SetVolume(VolumeBar.Value);
+            Volume_label.Text = "음량: " + VolumeBar.Value;
         }
 
+        // --- 적용 button event handler ---
+        // --- 적용 버튼 이벤트 핸들러 ---
         private void button3_Click(object sender, EventArgs e)
         {
-            if(SoundList_Box.SelectedItem == null)
+            // 박스 골라진게 없을경우 예외처리
+            if (SoundList_Box.SelectedItem == null)
             {
                 MessageBox.Show("파일을 선택하지 않았습니다.", "Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            string exePath = Assembly.GetExecutingAssembly().Location;
-            string baseDirectory = Path.GetDirectoryName(exePath);
-            //MessageBox.Show(Path.Combine(Application.StartupPath, baseDirectory + "/Sound/" + SoundList_Box.SelectedItem.ToString()));
-            soundFilePath = Path.Combine(Application.StartupPath, baseDirectory + "/Sound/" + SoundList_Box.SelectedItem.ToString());
-            LoadSoundBuffer(soundFilePath);
+
+            // 사운드 매니저에 선택된 사운드 파일 경로 설정
+            soundManager.SetSoundPath(soundFileService.GetFullPath(SoundList_Box
+                .SelectedItem
+                .ToString()));
+           
         }
+
 
         private void SoundList_Box_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -210,51 +227,8 @@ namespace customSoundDownKey
 
             try
             {
-                // 1. 현재 실행 중인 .exe 파일의 디렉토리 경로 가져오기
-                string exePath = Assembly.GetExecutingAssembly().Location;
-                string baseDirectory = Path.GetDirectoryName(exePath);
 
-                if (baseDirectory == null)
-                {
-                    MessageBox.Show("프로그램 실행 경로를 찾을 수 없습니다.", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                // 2. 고정된 'Sound' 폴더의 전체 경로 설정
-                // Path.Combine을 사용하여 운영체제에 맞는 경로 구분자(\ 또는 /)를 안전하게 사용합니다.
-                string soundFolderPath = Path.Combine(baseDirectory, "Sound");
-
-                // 3. 'Sound' 폴더가 실제로 존재하는지 확인
-                if (!Directory.Exists(soundFolderPath))
-                {
-                    MessageBox.Show($"'Sound' 폴더를 찾을 수 없습니다.\n폴더를 재생성합니다", "알림", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    Directory.CreateDirectory(soundFolderPath);
-                    return;
-                }
-
-                //// 4. --- 'Sound' 폴더 내의 폴더 목록 가져와서 ListBox에 추가 ---
-                //string[] directories = Directory.GetDirectories(soundFolderPath);
-
-                //foreach (string dir in directories)
-                //{
-                //    string folderName = Path.GetFileName(dir);
-                //    SoundList_Box.Items.Add($"[폴더] {folderName}");
-                //}
-
-                // 5. --- 'Sound' 폴더 내의 파일 목록 가져와서 ListBox에 추가 ---
-                string[] files = Directory.GetFiles(soundFolderPath);
-
-                foreach (string file in files)
-                {
-                    string fileName = Path.GetFileName(file);
-                    SoundList_Box.Items.Add($"{fileName}");
-                }
-
-                // ListBox에 항목이 성공적으로 추가되었음을 확인
-                if (SoundList_Box.Items.Count > 0)
-                {
-                    // MessageBox.Show($"'Sound' 폴더의 {ListBox1.Items.Count}개 항목을 로드했습니다.", "완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                SoundList_Box.Items.Add(soundFileService.GetSoundList());
             }
             catch (Exception ex)
             {
