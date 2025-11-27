@@ -98,6 +98,7 @@
             // 
             // Apply_Button
             // 
+            Apply_Button.Enabled = false;
             Apply_Button.Font = new Font("맑은 고딕", 8F);
             Apply_Button.Location = new Point(672, 344);
             Apply_Button.Margin = new Padding(5, 6, 5, 6);
