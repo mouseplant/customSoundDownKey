@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 //왜 나눴지
 namespace customSoundDownKey
@@ -32,6 +27,7 @@ namespace customSoundDownKey
         // 'Sound' 폴더 내의 모든 파일 이름을 배열로 반환
         public string[] GetSoundList()
         {
+            Console.WriteLine(soundDirectory);
             return Directory.GetFiles(soundDirectory)
                             .Select(Path.GetFileName)
                             .ToArray();

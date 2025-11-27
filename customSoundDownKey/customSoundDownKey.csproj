@@ -10,12 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MouseKeyHook" Version="5.7.1" />
-    <PackageReference Include="NAudio" Version="2.2.1" />
+    <Compile Remove="sound-script\**" />
+    <EmbeddedResource Remove="sound-script\**" />
+    <None Remove="sound-script\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="sound-script\" />
+    <PackageReference Include="MouseKeyHook" Version="5.7.1" />
+    <PackageReference Include="NAudio" Version="2.2.1" />
   </ItemGroup>
 
 </Project>

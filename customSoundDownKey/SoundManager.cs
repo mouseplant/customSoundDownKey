@@ -7,6 +7,10 @@ namespace customSoundDownKey
     {
         private string currentPath;
         private int volume = 25;
+        public SoundManager()
+        {
+            currentPath = string.Empty;
+        }
         public SoundManager(string path)
         {
             currentPath = path;
@@ -14,6 +18,17 @@ namespace customSoundDownKey
         public void SetSoundPath(string path)
         {
             currentPath = path;
+        }
+
+        public string GetSoundFileName()
+        {
+            if (string.IsNullOrEmpty(currentPath))
+                return string.Empty;
+            return Path.GetFileName(currentPath);
+        }
+        public string GetSoundPath()
+        {
+            return currentPath;
         }
 
         public void SetVolume(int vol)
@@ -48,7 +63,7 @@ namespace customSoundDownKey
                     // 2. WasapiOut 초기화: 저 레이턴시 설정
                     // AudioClientShareMode.Shared: 다른 앱과 공유
                     // latency: 밀리초 단위, 50ms 이하는 매우 낮음 (하드웨어/드라이버에 따라 제한될 수 있음)
-                    outputDevice = new WasapiOut(AudioClientShareMode.Shared, false, 0);
+                    outputDevice = new WasapiOut(AudioClientShareMode.Shared, false, 50);
 
                     outputDevice.Init(audioFile);
 
