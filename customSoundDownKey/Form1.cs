@@ -1,8 +1,12 @@
+// Copyright (c) 2026 mouseplant
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 // 참고: NAudio 라이브러리가 필요합니다. NuGet 패키지 매니저에서 NAudio를 설치하세요.
 // 참고: Gma.System.MouseKeyHook 라이브러리가 필요합니다. NuGet 패키지 매니저에서 설치하세요.
 // attention: this code uses NAudio and Gma.System.MouseKeyHook libraries.
 // Make sure to install them via NuGet Package Manager.
-// 오.. ai가 주석도 달아주네 
+
 using Gma.System.MouseKeyHook;
 using System.Runtime.InteropServices;
 
